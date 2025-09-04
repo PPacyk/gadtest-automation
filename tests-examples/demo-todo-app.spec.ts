@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page, JSHandle } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://demo.playwright.dev/todomvc');
@@ -481,11 +481,16 @@ async function checkNumberOfCompletedTodosInLocalStorage(
   }, expected);
 }
 
-async function checkTodosInLocalStorage(page: Page, title: string) {
+async function checkTodosInLocalStorage(
+  page: Page,
+  title: string,
+): Promise<JSHandle> {
   return await page.waitForFunction((t) => {
-    return JSON.parse(localStorage['react-todos'])
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((todo: any) => todo.title)
-      .includes(t);
+    return (
+      JSON.parse(localStorage['react-todos'])
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((todo: any) => todo.title)
+        .includes(t)
+    );
   }, title);
 }
