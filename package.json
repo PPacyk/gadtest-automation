@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "lint": "npx eslint .",
+    "lintmax": "npx eslint . --max-warnings 0"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +14,7 @@
   "devDependencies": {
     "@eslint/js": "^9.34.0",
     "@playwright/test": "^1.55.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^24.3.0",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
