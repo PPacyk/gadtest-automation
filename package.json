@@ -8,6 +8,7 @@
     "lint": "npx eslint .",
     "lintmax": "npx eslint . --max-warnings 0",
     "prepare": "husky",
+    "tsc:check": "npx tsc --noEmit --pretty --strict",
     "test": "npx playwright test",
     "test:headed": "npm run test -- --headed",
     "test:ui": "npm run test -- --ui",
