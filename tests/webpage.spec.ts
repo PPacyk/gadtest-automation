@@ -38,4 +38,14 @@ test.describe('Verify service main pages', () => {
     const title = await commentsPage.title();
     expect(title).toContain('Comments');
   });
+
+  test('home page title @simple @fast', async ({ page }) => {
+    await page.goto('');
+    await expect(page).toHaveTitle(/GAD/);
+  });
+
+  test('home page title @simple', async ({ page }) => {
+    await page.goto('');
+    await expect(page).toHaveTitle(/GAD/);
+  });
 });
