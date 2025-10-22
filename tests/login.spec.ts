@@ -8,15 +8,11 @@ test.describe('Verify login', () => {
   test('login with correct credentials @GAD_R02_01', async ({ page }) => {
     //Arrange
     const loginPage = new LoginPage(page);
-    await loginPage.goto();
-
-    const loginUserData: LoginUser = {
-      userEmail: testUser1.userEmail,
-      userPassword: testUser1.userPassword,
-    };
 
     //Act
-    await loginPage.login(loginUserData);
+    await loginPage.goto();
+    await loginPage.login(testUser1);
+
     const welcomePage = new WelcomePage(page);
     const title = await welcomePage.title();
 
