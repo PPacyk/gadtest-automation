@@ -16,6 +16,7 @@ export class RegisterPage extends BasePage {
   loginButton = this.page.getByRole('button', { name: 'LogIn' });
 
   loginError = this.page.getByTestId('login-error');
+  emailErrorText = this.page.locator('#octavalidate_email');
 
   constructor(page: Page) {
     super(page);
