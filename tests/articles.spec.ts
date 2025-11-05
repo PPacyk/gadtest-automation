@@ -66,29 +66,33 @@ test.describe('Verify articles', () => {
     await expect(addArticleView.articleErrorText).toHaveText(expectedErrorText);
   });
 
-  test('not create article with title exceeding 128 signs @GAD_R04_02', async () => {
-    //Arrange
-    const expectedErrorText = 'Article was not created';
-    const articleData = randomNewArticle(129);
-    articleData.title = '';
+  test.describe('title length', () => {
+    test('not create article with title exceeding 128 signs @GAD_R04_02', async () => {
+      //Arrange
+      const expectedErrorText = 'Article was not created';
+      const articleData = randomNewArticle(129);
+      articleData.title = '';
 
-    //Act
-    await addArticleView.createArticle(articleData);
+      //Act
+      await addArticleView.createArticle(articleData);
 
-    //Assert
-    await expect(addArticleView.articleErrorText).toHaveText(expectedErrorText);
-  });
+      //Assert
+      await expect(addArticleView.articleErrorText).toHaveText(
+        expectedErrorText,
+      );
+    });
 
-  test('create article with title with 128 signs @GAD_R04_02', async ({
-    page,
-  }) => {
-    //Arrange
-    const articlePage = new ArticlePage(page);
-    const articleData = randomNewArticle(128);
-    //Act
-    await addArticleView.createArticle(articleData);
+    test('create article with title with 128 signs @GAD_R04_02', async ({
+      page,
+    }) => {
+      //Arrange
+      const articlePage = new ArticlePage(page);
+      const articleData = randomNewArticle(128);
+      //Act
+      await addArticleView.createArticle(articleData);
 
-    //Assert
-    await expect(articlePage.articleTitle).toHaveText(articleData.title);
+      //Assert
+      await expect(articlePage.articleTitle).toHaveText(articleData.title);
+    });
   });
 });
