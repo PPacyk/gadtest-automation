@@ -1,4 +1,5 @@
 import { randomNewArticle } from '../src/factories/article.factory';
+import { AddArticleModel } from '../src/models/article.model';
 import { ArticlePage } from '../src/pages/article.page';
 import { ArticlesPage } from '../src/pages/articles.page';
 import { LoginPage } from '../src/pages/login.page';
@@ -7,30 +8,62 @@ import { AddArticleView } from '../src/views/add-article.view';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify articles', () => {
-  test('create new article @GAD_R04_01', async ({ page }) => {
-    //Arrange
-    const loginPage = new LoginPage(page);
+  let loginPage: LoginPage;
+  let articlesPage: ArticlesPage;
+  let addArticleView: AddArticleView;
+  let articleData: AddArticleModel;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    articlesPage = new ArticlesPage(page);
+    addArticleView = new AddArticleView(page);
+
     await loginPage.goto();
     await loginPage.login(testUser1);
-
-    const articlesPage = new ArticlesPage(page);
     await articlesPage.goto();
-
-    //Act
     await articlesPage.addArticleButtonLogged.click();
 
-    const addArticleView = new AddArticleView(page);
+    articleData = randomNewArticle();
+
     await expect.soft(addArticleView.header).toBeVisible();
+  });
+  test('create new article @GAD_R04_01', async ({ page }) => {
+    //Arrange
+    const articlePage = new ArticlePage(page);
 
-    const articleData = randomNewArticle();
-
+    //Act
     await addArticleView.createArticle(articleData);
 
     //Assert
-    const articlePage = new ArticlePage(page);
     await expect(articlePage.articleTitle).toHaveText(articleData.title);
     await expect(articlePage.articleBody).toHaveText(articleData.body, {
       useInnerText: true,
     });
+  });
+
+  test('not create article with incorrect title @GAD_R04_01', async () => {
+    //Arrange
+    const expectedErrorText = 'Article was not created';
+
+    articleData.title = '';
+
+    //Act
+    await addArticleView.createArticle(articleData);
+
+    //Assert
+    await expect(addArticleView.articleErrorText).toHaveText(expectedErrorText);
+  });
+
+  test('not create article with incorrect body @GAD_R04_01', async () => {
+    //Arrange
+    const expectedErrorText = 'Article was not created';
+
+    articleData.body = '';
+
+    //Act
+    await addArticleView.createArticle(articleData);
+
+    //Assert
+    await expect(addArticleView.articleErrorText).toHaveText(expectedErrorText);
   });
 });
