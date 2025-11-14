@@ -20,7 +20,9 @@ test.describe('Verify login', () => {
     expect(title).toContain('Welcome');
   });
 
-  test('reject login with incorrect password @GAD_R02_01', async ({ page }) => {
+  test('reject login with an incorrect password @GAD_R02_01', async ({
+    page,
+  }) => {
     //Arrange
     const loginUserData: LoginUser = {
       userEmail: testUser1.userEmail,
