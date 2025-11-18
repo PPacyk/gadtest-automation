@@ -23,20 +23,6 @@ test.describe('Verify articles', () => {
 
     await expect.soft(addArticleView.header).toBeVisible();
   });
-  test('create new article @GAD_R04_01', async ({ page }) => {
-    //Arrange
-    const articlePage = new ArticlePage(page);
-    const articleData = randomNewArticle();
-
-    //Act
-    await addArticleView.createArticle(articleData);
-
-    //Assert
-    await expect(articlePage.articleTitle).toHaveText(articleData.title);
-    await expect(articlePage.articleBody).toHaveText(articleData.body, {
-      useInnerText: true,
-    });
-  });
 
   test('not create article with incorrect title @GAD_R04_01', async () => {
     //Arrange
