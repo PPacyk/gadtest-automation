@@ -26,7 +26,7 @@ test.describe('Create, verify and delete article', () => {
     await articlesPage.goto();
   });
 
-  test('create new article @GAD_R04_01', async () => {
+  test('create new article @GAD-R04-01', async () => {
     //Arrange
     articleData = randomNewArticle();
 
@@ -55,7 +55,7 @@ test.describe('Create, verify and delete article', () => {
     });
   });
 
-  test('user can delete his own article @GAD-R04-04', async ({ page }) => {
+  test('user can delete his own article @GAD-R04-04', async () => {
     // Arrange
     await articlesPage.gotoArticle(articleData.title);
 
