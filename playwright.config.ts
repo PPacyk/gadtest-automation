@@ -1,4 +1,4 @@
-import { BASE_URL } from './src/global-setup';
+import { BASE_URL } from './src/env.config';
 import { defineConfig, devices } from '@playwright/test';
 
 /**
