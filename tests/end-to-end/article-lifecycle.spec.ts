@@ -8,7 +8,7 @@ import { AddArticleView } from '../../src/views/add-article.view';
 import { expect, test } from '@playwright/test';
 
 test.describe.configure({ mode: 'serial' });
-test.describe('Create and verify article', () => {
+test.describe('Create, verify and delete article', () => {
   let loginPage: LoginPage;
   let articlesPage: ArticlesPage;
   let addArticleView: AddArticleView;
@@ -26,7 +26,7 @@ test.describe('Create and verify article', () => {
     await articlesPage.goto();
   });
 
-  test('create new article @GAD_R04_01', async () => {
+  test('create new article @GAD-R04-01', async () => {
     //Arrange
     articleData = randomNewArticle();
 
@@ -53,5 +53,21 @@ test.describe('Create and verify article', () => {
     await expect(articlePage.articleBody).toHaveText(articleData.body, {
       useInnerText: true,
     });
+  });
+
+  test('user can delete his own article @GAD-R04-04', async () => {
+    // Arrange
+    await articlesPage.gotoArticle(articleData.title);
+
+    // Act
+    await articlePage.deleteArticle();
+
+    // Assert
+    await articlesPage.waitForPageToLoadUrl();
+    const title = await articlesPage.title();
+    expect(title).toContain('Articles');
+
+    await articlesPage.searchArticle(articleData.title);
+    await expect(articlesPage.noResultText).toHaveText('No data');
   });
 });

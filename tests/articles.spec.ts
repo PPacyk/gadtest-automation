@@ -24,7 +24,7 @@ test.describe('Verify articles', () => {
     await expect.soft(addArticleView.header).toBeVisible();
   });
 
-  test('not create article with incorrect title @GAD_R04_01', async () => {
+  test('not create article with incorrect title @GAD-R04-01', async () => {
     //Arrange
     const expectedErrorText = 'Article was not created';
     const articleData = randomNewArticle();
@@ -38,7 +38,7 @@ test.describe('Verify articles', () => {
     await expect(addArticleView.articleErrorText).toHaveText(expectedErrorText);
   });
 
-  test('not create article with incorrect body @GAD_R04_01', async () => {
+  test('not create article with incorrect body @GAD-R04-01', async () => {
     //Arrange
     const expectedErrorText = 'Article was not created';
     const articleData = randomNewArticle();
@@ -53,7 +53,7 @@ test.describe('Verify articles', () => {
   });
 
   test.describe('title length', () => {
-    test('not create article with title exceeding 128 signs @GAD_R04_02', async () => {
+    test('not create article with title exceeding 128 signs @GAD-R04-02', async () => {
       //Arrange
       const expectedErrorText = 'Article was not created';
       const articleData = randomNewArticle(129);
@@ -68,7 +68,7 @@ test.describe('Verify articles', () => {
       );
     });
 
-    test('create article with title with 128 signs @GAD_R04_02', async ({
+    test('create article with title with 128 signs @GAD-R04-02', async ({
       page,
     }) => {
       //Arrange
