@@ -35,7 +35,7 @@ test.describe('Create, verify and delete comment', () => {
     await addArticleView.createArticle(articleData);
   });
 
-  test('create new comment @GAD-R05-01', async ({ page }) => {
+  test('create new comment @GAD-R05-01', async () => {
     //Create new comment
     //Arrange
     const expectedAddCommentHeader = 'Add New Comment';
