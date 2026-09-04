@@ -40,7 +40,7 @@ test.describe('Create, verify and delete comment', () => {
     await addArticleView.createArticle(articleData);
   });
 
-  test('operate on comments @GAD-R05-01', async () => {
+  test('operate on comments @GAD-R05-01 @GAD-R05-02 @GAD-R05-03', async () => {
     const newCommentData = prepareRandomComment();
 
     await test.step('create new comment', async () => {
@@ -101,6 +101,23 @@ test.describe('Create, verify and delete comment', () => {
       await expect(updatedArticleComment.body).toHaveText(
         editedCommentData.body,
       );
+    });
+
+    await test.step('create additional comment', async () => {
+      //Arrange
+      const secondCommentData = prepareRandomComment();
+
+      //Act
+      await articlePage.addCommentButton.click();
+      await commentView.createComment(secondCommentData);
+
+      //Assert
+      const articleComment = articlePage.getArticleComment(
+        secondCommentData.body,
+      );
+      await expect(articleComment.body).toHaveText(secondCommentData.body);
+      await articleComment.link.click();
+      await expect(commentPage.commentBody).toHaveText(secondCommentData.body);
     });
   });
 });
