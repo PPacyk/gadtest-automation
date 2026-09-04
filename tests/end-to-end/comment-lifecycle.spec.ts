@@ -1,6 +1,7 @@
 import { randomNewArticle } from '../../src/factories/article.factory';
 import { prepareRandomComment } from '../../src/factories/comment.factory';
 import { AddArticleModel } from '../../src/models/article.model';
+import { AddCommentModel } from '../../src/models/comment.model';
 import { ArticlePage } from '../../src/pages/article.page';
 import { ArticlesPage } from '../../src/pages/articles.page';
 import { CommentPage } from '../../src/pages/comment.page';
@@ -39,48 +40,67 @@ test.describe('Create, verify and delete comment', () => {
     await addArticleView.createArticle(articleData);
   });
 
-  test('create new comment @GAD-R05-01', async () => {
-    //Create new comment
-    //Arrange
-    const expectedAddCommentHeader = 'Add New Comment';
-    const expectedCommentCreatedPopup = 'Comment was created';
-    const expectedCommentUpdatedPopup = 'Comment was updated';
-
+  test('operate on comments @GAD-R05-01', async () => {
     const newCommentData = prepareRandomComment();
 
-    //Act
-    await articlePage.addCommentButton.click();
-    await expect(commentView.header).toHaveText(expectedAddCommentHeader);
-    await commentView.createComment(newCommentData);
+    await test.step('create new comment', async () => {
+      //Arrange
+      const expectedCommentCreatedPopup = 'Comment was created';
+      const expectedAddCommentHeader = 'Add New Comment';
 
-    //Assert
-    await expect(articlePage.articleErrorText).toHaveText(
-      expectedCommentCreatedPopup,
-    );
+      //Act
+      await articlePage.addCommentButton.click();
+      await expect
+        .soft(commentView.header)
+        .toHaveText(expectedAddCommentHeader);
+      await commentView.createComment(newCommentData);
 
-    //Verify comment
-    //Act
-    const articleComment = articlePage.getArticleComment(newCommentData.body);
-    await expect(articleComment.body).toHaveText(newCommentData.body);
-    await articleComment.link.click();
+      //Assert
+      await expect
+        .soft(articlePage.articleErrorText)
+        .toHaveText(expectedCommentCreatedPopup);
+    });
 
-    //Assert
-    await expect(commentPage.commentBody).toHaveText(newCommentData.body);
+    await test.step('verify comment', async () => {
+      //Act
+      const articleComment = articlePage.getArticleComment(newCommentData.body);
+      await expect(articleComment.body).toHaveText(newCommentData.body);
+      await articleComment.link.click();
 
-    //Edit comment
-    const editedCommentData = prepareRandomComment();
+      //Assert
+      await expect(commentPage.commentBody).toHaveText(newCommentData.body);
+    });
 
-    await commentPage.editButton.click();
-    await editCommentView.updateComment(editedCommentData);
-    await expect(commentPage.commentBody).toHaveText(editedCommentData.body);
-    await expect(commentPage.alertPopup).toHaveText(
-      expectedCommentUpdatedPopup,
-    );
-    await commentPage.returnLink.click();
+    let editedCommentData: AddCommentModel;
+    await test.step('update comment', async () => {
+      //Arrange
+      const expectedCommentUpdatedPopup = 'Comment was updated';
 
-    const updatedArticleComment = articlePage.getArticleComment(
-      editedCommentData.body,
-    );
-    await expect(updatedArticleComment.body).toHaveText(editedCommentData.body);
+      editedCommentData = prepareRandomComment();
+
+      //Act
+      await commentPage.editButton.click();
+      await editCommentView.updateComment(editedCommentData);
+
+      //Assert
+      await expect
+        .soft(commentPage.alertPopup)
+        .toHaveText(expectedCommentUpdatedPopup);
+      await expect(commentPage.commentBody).toHaveText(editedCommentData.body);
+    });
+
+    await test.step('verify updated comment in article page', async () => {
+      //Act
+      await commentPage.returnLink.click();
+
+      const updatedArticleComment = articlePage.getArticleComment(
+        editedCommentData.body,
+      );
+
+      //Assert
+      await expect(updatedArticleComment.body).toHaveText(
+        editedCommentData.body,
+      );
+    });
   });
 });
